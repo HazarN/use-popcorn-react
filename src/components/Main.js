@@ -1,10 +1,10 @@
 import SearchedMovies from './boxes/SearchedMovies';
 import WatchedMovies from './boxes/WatchedMovies';
 
-const Main = () => {
+const Main = ({ movies }) => {
   return (
     <main className='main'>
-      <SearchedMovies />
+      <SearchedMovies movies={movies} />
       <WatchedMovies />
     </main>
   );
