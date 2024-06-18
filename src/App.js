@@ -1,9 +1,12 @@
-const App = () => {
+import Navbar from './components/Navbar';
+import Main from './components/Main';
+
+export default function App() {
   return (
     <>
-      <h1>Hello World!</h1>
+      <Navbar />
+
+      <Main />
     </>
   );
-};
-
-export default App;
+}
