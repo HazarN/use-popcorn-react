@@ -1,13 +1,5 @@
-import SearchedMovies from './boxes/SearchedMovies';
-import WatchedMovies from './boxes/WatchedMovies';
-
-const Main = ({ movies }) => {
-  return (
-    <main className='main'>
-      <SearchedMovies movies={movies} />
-      <WatchedMovies />
-    </main>
-  );
+const Main = ({ children }) => {
+  return <main className='main'>{children}</main>;
 };
 
 export default Main;

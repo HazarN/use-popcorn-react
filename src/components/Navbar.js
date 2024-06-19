@@ -1,16 +1,14 @@
 import { useState } from 'react';
 
-const Navbar = ({ movies }) => {
+export const Navbar = ({ children }) => {
   return (
     <nav className='nav-bar'>
       <Logo />
       <SearchBar />
-      <NavbarResult movies={movies} />
+      {children}
     </nav>
   );
 };
-
-export default Navbar;
 
 // Subcomponets
 
@@ -35,7 +33,7 @@ const SearchBar = () => {
     />
   );
 };
-const NavbarResult = ({ movies }) => {
+export const NavbarResult = ({ movies }) => {
   return (
     <p className='num-results'>
       Found <strong>{movies.length}</strong> results

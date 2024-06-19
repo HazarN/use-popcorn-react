@@ -28,15 +28,15 @@ const average = arr =>
 
 // Right box
 const WatchedMovies = () => {
-  const [isOpen2, setIsOpen2] = useState(true);
+  const [isOpen, setIsOpen] = useState(true);
   const [watched, setWatched] = useState(tempWatchedData);
 
   return (
     <div className='box'>
-      <button className='btn-toggle' onClick={() => setIsOpen2(open => !open)}>
-        {isOpen2 ? '–' : '+'}
+      <button className='btn-toggle' onClick={() => setIsOpen(open => !open)}>
+        {isOpen ? '–' : '+'}
       </button>
-      {isOpen2 && (
+      {isOpen && (
         <>
           <Summary watched={watched} />
           <WatchedList watched={watched} />

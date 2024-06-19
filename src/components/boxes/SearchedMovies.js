@@ -1,25 +1,23 @@
 import { useState } from 'react';
 
 // Left box
-const SearchedMovies = ({ movies }) => {
-  const [isOpen1, setIsOpen1] = useState(true);
+export const SearchedMovies = ({ children }) => {
+  const [isOpen, setIsOpen] = useState(true);
 
   return (
     <div className='box'>
-      <button className='btn-toggle' onClick={() => setIsOpen1(open => !open)}>
-        {isOpen1 ? '–' : '+'}
+      <button className='btn-toggle' onClick={() => setIsOpen(open => !open)}>
+        {isOpen ? '–' : '+'}
       </button>
 
-      {isOpen1 && <SearchedList movies={movies} />}
+      {isOpen && children}
     </div>
   );
 };
 
-export default SearchedMovies;
-
 // Subcomponents
 
-const SearchedList = ({ movies }) => {
+export const SearchedList = ({ movies }) => {
   return (
     <ul className='list'>
       {movies?.map(movie => (
