@@ -1,18 +1,12 @@
 import { useState } from 'react';
 
 export const Navbar = ({ children }) => {
-  return (
-    <nav className='nav-bar'>
-      <Logo />
-      <SearchBar />
-      {children}
-    </nav>
-  );
+  return <nav className='nav-bar'>{children}</nav>;
 };
 
 // Subcomponets
 
-const Logo = () => {
+export const Logo = () => {
   return (
     <div className='logo'>
       <span role='img'>🍿</span>
@@ -20,7 +14,7 @@ const Logo = () => {
     </div>
   );
 };
-const SearchBar = () => {
+export const SearchBar = () => {
   const [query, setQuery] = useState('');
 
   return (
