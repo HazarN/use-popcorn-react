@@ -31,7 +31,7 @@ const Rating = ({
 
   const handleRate = rating => {
     setRating(rating);
-    onSetRating(rating);
+    if (onSetRating) onSetRating(rating);
   };
   const handleHoverIn = rating => setHoverRating(rating);
   const handleHoverOut = () => setHoverRating(0);
