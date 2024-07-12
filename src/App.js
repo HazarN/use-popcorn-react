@@ -7,6 +7,7 @@ import Loader from './components/Loader';
 import ErrorMessage from './components/ErrorMessage';
 
 export default function App() {
+  const [query, setQuery] = useState('');
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -16,9 +17,10 @@ export default function App() {
     async function fetchMovies() {
       try {
         setIsLoading(true);
+        setError('');
 
         const res = await fetch(
-          `https://www.omdbapi.com/?&apikey=${process.env.REACT_APP_KEY}&s=dark knight`
+          `https://www.omdbapi.com/?&apikey=${process.env.REACT_APP_KEY}&s=${query}`
         );
         const data = await res.json();
 
@@ -35,14 +37,20 @@ export default function App() {
       }
     }
 
-    //fetchMovies();
-  }, []);
+    if (query.length < 3) {
+      setMovies([]);
+      setError('');
+      return;
+    }
+
+    fetchMovies();
+  }, [query]);
 
   return (
     <>
       <Navbar>
         <Logo />
-        <SearchBar />
+        <SearchBar query={query} setQuery={setQuery} />
         <NavbarResult movies={movies} />
       </Navbar>
 

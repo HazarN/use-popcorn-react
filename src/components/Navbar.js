@@ -14,9 +14,7 @@ export const Logo = () => {
     </div>
   );
 };
-export const SearchBar = () => {
-  const [query, setQuery] = useState('');
-
+export const SearchBar = ({ query, setQuery }) => {
   return (
     <input
       className='search'
