@@ -1,7 +1,13 @@
 import { useEffect, useState } from 'react';
 
 import { Navbar, Logo, SearchBar, NavbarResult } from './components/Navbar';
-import { Box, Summary, WatchedList, SearchedList } from './components/Box';
+import {
+  Box,
+  Summary,
+  WatchedList,
+  SearchedList,
+  SelectedMovie,
+} from './components/Box';
 import Main from './components/Main';
 import Loader from './components/Loader';
 import ErrorMessage from './components/ErrorMessage';
@@ -12,9 +18,18 @@ export default function App() {
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [selectedId, setSelectedId] = useState(null);
+
+  function handleSelect(id) {
+    setSelectedId(selectedId => (selectedId = selectedId === id ? null : id));
+  }
+
+  function handleUnselect() {
+    setSelectedId(null);
+  }
 
   useEffect(() => {
-    async function fetchMovies() {
+    async function getMoviesByQuery(query) {
       try {
         setIsLoading(true);
         setError('');
@@ -43,7 +58,7 @@ export default function App() {
       return;
     }
 
-    fetchMovies();
+    getMoviesByQuery(query);
   }, [query]);
 
   return (
@@ -58,12 +73,23 @@ export default function App() {
         <Box>
           {isLoading && <Loader />}
           {error && <ErrorMessage message={error} />}
-          {!isLoading && !error && <SearchedList movies={movies} />}
+          {!isLoading && !error && (
+            <SearchedList movies={movies} onSelect={handleSelect} />
+          )}
         </Box>
 
         <Box>
-          <Summary watched={watched} />
-          <WatchedList watched={watched} />
+          {selectedId ? (
+            <SelectedMovie
+              selectedId={selectedId}
+              onUnselect={handleUnselect}
+            />
+          ) : (
+            <>
+              <Summary watched={watched} />
+              <WatchedList watched={watched} />
+            </>
+          )}
         </Box>
       </Main>
     </>

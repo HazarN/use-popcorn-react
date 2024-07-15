@@ -1,4 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+
+import Loader from './Loader';
+import ErrorMessage from './ErrorMessage';
+import Rating from './Rating';
 
 const average = arr =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
@@ -19,30 +23,112 @@ export const Box = ({ children }) => {
 };
 
 // Subcomponents
+export const SelectedMovie = ({ selectedId, onUnselect }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [movie, setMovie] = useState({});
 
-export const SearchedList = ({ movies }) => {
+  const {
+    Title: title,
+    Year: year,
+    Rated: rated,
+    Poster: poster,
+    Released: released,
+    Runtime: runtime,
+    Genre: genre,
+    Director: director,
+    Writer: writer,
+    Actors: actors,
+    Plot: plot,
+    imdbRating,
+  } = movie;
+
+  useEffect(() => {
+    async function getMovieById(selectedId) {
+      try {
+        setIsLoading(true);
+        setError('');
+
+        const res = await fetch(
+          `https://www.omdbapi.com/?&apikey=${process.env.REACT_APP_KEY}&i=${selectedId}`
+        );
+        const data = await res.json();
+
+        if (!res.ok) throw new Error('Failed to fetch!');
+        if (data.Response === 'False') throw new Error(data.Error);
+
+        setMovie(data);
+      } catch (err) {
+        console.error(err);
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    getMovieById(selectedId);
+  }, [selectedId]);
+
+  return (
+    <div className='details'>
+      {isLoading && <Loader />}
+      {error && <ErrorMessage message={error} />}
+      {!isLoading && !error && (
+        <header>
+          <button className='btn-back' onClick={onUnselect}>
+            &larr;
+          </button>
+
+          <img src={poster} alt={`Poster of ${title}`} />
+
+          <div className='details-overview'>
+            <h2>{title}</h2>
+            <p>
+              {released} &bull; {runtime}
+            </p>
+            <p>{genre}</p>
+            <p>
+              <span>⭐</span>
+              {imdbRating} IMDB Rating
+            </p>
+          </div>
+        </header>
+      )}
+
+      <section>
+        <div className='rating'>
+          <Rating starNumber={10} size={24} />
+        </div>
+        <p>
+          <em>{plot}</em>
+        </p>
+        <p>Starring {actors}</p>
+        <p>Directed By {director}</p>
+      </section>
+    </div>
+  );
+};
+
+export const WatchedList = ({ watched }) => {
   return (
     <ul className='list'>
-      {movies?.map(movie => (
-        <Movie movie={movie} key={movie.imdbID} />
+      {watched.map(movie => (
+        <WatchedMovie movie={movie} />
       ))}
     </ul>
   );
 };
-const Movie = ({ movie }) => {
+
+export const SearchedList = ({ movies, onSelect }) => {
   return (
-    <li>
-      <img src={movie.Poster} alt={`${movie.Title} poster`} />
-      <h3>{movie.Title}</h3>
-      <div>
-        <p>
-          <span>🗓</span>
-          <span>{movie.Year}</span>
-        </p>
-      </div>
-    </li>
+    <ul className='list list-movies'>
+      {movies?.map(movie => (
+        <Movie movie={movie} key={movie.imdbID} onSelect={onSelect} />
+      ))}
+    </ul>
   );
 };
+
 export const Summary = ({ watched }) => {
   const avgImdbRating = average(watched.map(movie => movie.imdbRating));
   const avgUserRating = average(watched.map(movie => movie.userRating));
@@ -73,15 +159,22 @@ export const Summary = ({ watched }) => {
     </div>
   );
 };
-export const WatchedList = ({ watched }) => {
+
+const Movie = ({ movie, onSelect }) => {
   return (
-    <ul className='list'>
-      {watched.map(movie => (
-        <WatchedMovie movie={movie} />
-      ))}
-    </ul>
+    <li onClick={() => onSelect(movie.imdbID)}>
+      <img src={movie.Poster} alt={`${movie.Title} poster`} />
+      <h3>{movie.Title}</h3>
+      <div>
+        <p>
+          <span>🗓</span>
+          <span>{movie.Year}</span>
+        </p>
+      </div>
+    </li>
   );
 };
+
 const WatchedMovie = ({ movie }) => {
   return (
     <li key={movie.imdbID}>
