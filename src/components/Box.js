@@ -23,10 +23,11 @@ export const Box = ({ children }) => {
 };
 
 // Subcomponents
-export const SelectedMovie = ({ selectedId, onUnselect }) => {
+export const SelectedMovie = ({ selectedId, onUnselect, onAddWatched }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [movie, setMovie] = useState({});
+  const [userRating, setUserRating] = useState(0);
 
   const {
     Title: title,
@@ -42,6 +43,20 @@ export const SelectedMovie = ({ selectedId, onUnselect }) => {
     Plot: plot,
     imdbRating,
   } = movie;
+
+  const handleAdd = () => {
+    const newMovie = {
+      imdbID: selectedId,
+      title,
+      year,
+      poster,
+      imdbRating: Number(imdbRating),
+      runtime: Number(runtime.split(' ').at(0)),
+    };
+
+    onAddWatched(newMovie);
+    onUnselect();
+  };
 
   useEffect(() => {
     async function getMovieById(selectedId) {
@@ -97,7 +112,10 @@ export const SelectedMovie = ({ selectedId, onUnselect }) => {
 
       <section>
         <div className='rating'>
-          <Rating starNumber={10} size={24} />
+          <Rating starNumber={10} size={24} onSetRating={setUserRating} />
+          <button className='btn-add' onClick={handleAdd}>
+            Add to the list
+          </button>
         </div>
         <p>
           <em>{plot}</em>
@@ -178,8 +196,8 @@ const Movie = ({ movie, onSelect }) => {
 const WatchedMovie = ({ movie }) => {
   return (
     <li key={movie.imdbID}>
-      <img src={movie.Poster} alt={`${movie.Title} poster`} />
-      <h3>{movie.Title}</h3>
+      <img src={movie.poster} alt={`${movie.title} poster`} />
+      <h3>{movie.title}</h3>
       <div>
         <p>
           <span>⭐️</span>

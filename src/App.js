@@ -28,6 +28,10 @@ export default function App() {
     setSelectedId(null);
   }
 
+  function handleAddWatched(movie) {
+    setWatched(watched => [...watched, movie]);
+  }
+
   useEffect(() => {
     async function getMoviesByQuery(query) {
       try {
@@ -83,6 +87,7 @@ export default function App() {
             <SelectedMovie
               selectedId={selectedId}
               onUnselect={handleUnselect}
+              onAddWatched={handleAddWatched}
             />
           ) : (
             <>
