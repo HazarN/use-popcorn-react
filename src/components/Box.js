@@ -95,11 +95,15 @@ export const SelectedMovie = ({
     getMovieById(selectedId);
   }, [selectedId]);
 
-  // without cleanup function
   useEffect(() => {
     if (!title) return;
 
     document.title = `Movie | ${title}`;
+
+    // Clean-up function
+    return () => {
+      document.title = 'usePopcorn';
+    };
   }, [title]);
 
   return (
