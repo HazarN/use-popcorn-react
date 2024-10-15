@@ -23,11 +23,21 @@ export const Box = ({ children }) => {
 };
 
 // Subcomponents
-export const SelectedMovie = ({ selectedId, onUnselect, onAddWatched }) => {
+export const SelectedMovie = ({
+  selectedId,
+  onUnselect,
+  onAddWatched,
+  watched,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [movie, setMovie] = useState({});
   const [userRating, setUserRating] = useState(0);
+
+  const isWatched = watched.some(movie => movie.imdbID === selectedId);
+  const watchedUserRating = watched.find(
+    movie => movie.imdbID === selectedId
+  )?.userRating;
 
   const {
     Title: title,
@@ -52,6 +62,7 @@ export const SelectedMovie = ({ selectedId, onUnselect, onAddWatched }) => {
       poster,
       imdbRating: Number(imdbRating),
       runtime: Number(runtime.split(' ').at(0)),
+      userRating,
     };
 
     onAddWatched(newMovie);
@@ -111,12 +122,19 @@ export const SelectedMovie = ({ selectedId, onUnselect, onAddWatched }) => {
       )}
 
       <section>
-        <div className='rating'>
-          <Rating starNumber={10} size={24} onSetRating={setUserRating} />
-          <button className='btn-add' onClick={handleAdd}>
-            Add to the list
-          </button>
-        </div>
+        {!isWatched ? (
+          <div className='rating'>
+            <Rating starNumber={10} size={24} onSetRating={setUserRating} />
+
+            {userRating > 0 && (
+              <button className='btn-add' onClick={handleAdd}>
+                Add to the list
+              </button>
+            )}
+          </div>
+        ) : (
+          <p>You have rated that movie a {watchedUserRating}/10</p>
+        )}
         <p>
           <em>{plot}</em>
         </p>
@@ -127,11 +145,11 @@ export const SelectedMovie = ({ selectedId, onUnselect, onAddWatched }) => {
   );
 };
 
-export const WatchedList = ({ watched }) => {
+export const WatchedList = ({ watched, onDeleteWatched }) => {
   return (
     <ul className='list'>
       {watched.map(movie => (
-        <WatchedMovie movie={movie} />
+        <WatchedMovie movie={movie} onDeleteWatched={onDeleteWatched} />
       ))}
     </ul>
   );
@@ -163,15 +181,15 @@ export const Summary = ({ watched }) => {
         </p>
         <p>
           <span>⭐️</span>
-          <span>{avgImdbRating}</span>
+          <span>{avgImdbRating.toFixed(2)}</span>
         </p>
         <p>
           <span>🌟</span>
-          <span>{avgUserRating}</span>
+          <span>{avgUserRating.toFixed(2)}</span>
         </p>
         <p>
           <span>⏳</span>
-          <span>{avgRuntime} min</span>
+          <span>{avgRuntime.toFixed(2)} min</span>
         </p>
       </div>
     </div>
@@ -193,7 +211,7 @@ const Movie = ({ movie, onSelect }) => {
   );
 };
 
-const WatchedMovie = ({ movie }) => {
+const WatchedMovie = ({ movie, onDeleteWatched }) => {
   return (
     <li key={movie.imdbID}>
       <img src={movie.poster} alt={`${movie.title} poster`} />
@@ -211,6 +229,13 @@ const WatchedMovie = ({ movie }) => {
           <span>⏳</span>
           <span>{movie.runtime} min</span>
         </p>
+
+        <button
+          className='btn-delete'
+          onClick={() => onDeleteWatched(movie.imdbID)}
+        >
+          X
+        </button>
       </div>
     </li>
   );
