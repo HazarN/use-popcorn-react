@@ -70,6 +70,19 @@ export const SelectedMovie = ({
   };
 
   useEffect(() => {
+    function callback(e) {
+      if (e.key === 'Escape') {
+        onUnselect();
+        console.log('Escape event!');
+      }
+    }
+
+    document.addEventListener('keydown', callback);
+
+    return () => document.removeEventListener('keydown', callback);
+  }, [onUnselect]);
+
+  useEffect(() => {
     async function getMovieById(selectedId) {
       try {
         setIsLoading(true);

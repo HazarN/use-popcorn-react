@@ -73,6 +73,7 @@ export default function App() {
       return;
     }
 
+    handleUnselect();
     getMoviesByQuery(query);
 
     return () => controller.abort();
