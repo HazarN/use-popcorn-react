@@ -22,6 +22,8 @@ export default function App() {
   // useState callback functions and all initial values
   // rendered when mounting
   const [watched, setWatched] = useState(function () {
+    if (!localStorage.getItem('watched')) return [];
+
     const stored = localStorage.getItem('watched');
 
     return JSON.parse(stored);

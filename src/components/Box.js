@@ -190,9 +190,13 @@ export const SearchedList = ({ movies, onSelect }) => {
 };
 
 export const Summary = ({ watched }) => {
-  const avgImdbRating = average(watched.map(movie => movie.imdbRating));
-  const avgUserRating = average(watched.map(movie => movie.userRating));
-  const avgRuntime = average(watched.map(movie => movie.runtime));
+  const avgImdbRating = average(watched.map(movie => movie.imdbRating)).toFixed(
+    2
+  );
+  const avgUserRating = average(watched.map(movie => movie.userRating)).toFixed(
+    2
+  );
+  const avgRuntime = average(watched.map(movie => movie.runtime)).toFixed(2);
 
   return (
     <div className='summary'>
@@ -205,15 +209,15 @@ export const Summary = ({ watched }) => {
         </p>
         <p>
           <span>⭐️</span>
-          <span>{avgImdbRating.toFixed(2)}</span>
+          <span>{avgImdbRating}</span>
         </p>
         <p>
           <span>🌟</span>
-          <span>{avgUserRating.toFixed(2)}</span>
+          <span>{avgUserRating}</span>
         </p>
         <p>
           <span>⏳</span>
-          <span>{avgRuntime.toFixed(2)} min</span>
+          <span>{avgRuntime} min</span>
         </p>
       </div>
     </div>
