@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useMovies } from './hooks/useMovies';
 
 import { Navbar, Logo, SearchBar, NavbarResult } from './components/Navbar';
 import {
@@ -14,11 +15,7 @@ import ErrorMessage from './components/ErrorMessage';
 
 export default function App() {
   const [query, setQuery] = useState('');
-  const [movies, setMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
   const [selectedId, setSelectedId] = useState(null);
-
   // useState callback functions and all initial values
   // rendered when mounting
   const [watched, setWatched] = useState(function () {
@@ -28,6 +25,8 @@ export default function App() {
 
     return JSON.parse(stored);
   });
+
+  const { movies, isLoading, error } = useMovies(query, handleUnselect);
 
   function handleSelect(id) {
     setSelectedId(selectedId => (selectedId = selectedId === id ? null : id));
@@ -51,49 +50,6 @@ export default function App() {
     },
     [watched]
   );
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    async function getMoviesByQuery(query) {
-      try {
-        setIsLoading(true);
-        setError('');
-
-        const res = await fetch(
-          `https://www.omdbapi.com/?&apikey=${process.env.REACT_APP_KEY}&s=${query}`,
-          {
-            signal: controller.signal,
-          }
-        );
-        const data = await res.json();
-
-        if (!res.ok) throw new Error('Failed to fetch!');
-
-        if (!data.Search) throw new Error(data.Error);
-
-        setMovies(data.Search);
-        setError('');
-      } catch (err) {
-        console.error(err);
-
-        if (err.name !== 'AbortError') setError(err.message);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    if (query.length < 3) {
-      setMovies([]);
-      setError('');
-      return;
-    }
-
-    handleUnselect();
-    getMoviesByQuery(query);
-
-    return () => controller.abort();
-  }, [query]);
 
   return (
     <>

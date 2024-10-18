@@ -47,7 +47,7 @@ export function useMovies(query, callback) {
     getMoviesByQuery(query);
 
     return () => controller.abort();
-  }, [query, callback]);
+  }, [query]); // Eslint tells that you should add 'callback' but when i add it, program fails about requesting(too many request at the same time)
 
   return { movies, isLoading, error };
 }
