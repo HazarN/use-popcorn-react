@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useMovies } from './hooks/useMovies';
 
 import { Navbar, Logo, SearchBar, NavbarResult } from './components/Navbar';
@@ -23,7 +23,7 @@ export default function App() {
   const { movies, isLoading, error } = useMovies(query, handleUnselect);
 
   function handleSelect(id) {
-    setSelectedId(selectedId => (selectedId = selectedId === id ? null : id));
+    setSelectedId((selectedId) => (selectedId = selectedId === id ? null : id));
   }
 
   function handleUnselect() {
@@ -31,11 +31,11 @@ export default function App() {
   }
 
   function handleAddWatched(movie) {
-    setWatched(watched => [...watched, movie]);
+    setWatched((watched) => [...watched, movie]);
   }
 
   function handleDeleteWatched(id) {
-    setWatched(watched => watched.filter(movie => movie.imdbID !== id));
+    setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
   }
 
   return (

@@ -29,11 +29,11 @@ const Rating = ({
   const [rating, setRating] = useState(defaultRating);
   const [hoverRating, setHoverRating] = useState(0);
 
-  const handleRate = rating => {
+  const handleRate = (rating) => {
     setRating(rating);
     if (onSetRating) onSetRating(rating);
   };
-  const handleHoverIn = rating => setHoverRating(rating);
+  const handleHoverIn = (rating) => setHoverRating(rating);
   const handleHoverOut = () => setHoverRating(0);
 
   return (

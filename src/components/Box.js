@@ -3,8 +3,9 @@ import { useEffect, useRef, useState } from 'react';
 import Loader from './Loader';
 import ErrorMessage from './ErrorMessage';
 import Rating from './Rating';
+import { useKeyboard } from '../hooks/useKeyboard';
 
-const average = arr =>
+const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
 // Left box
@@ -13,7 +14,7 @@ export const Box = ({ children }) => {
 
   return (
     <div className='box'>
-      <button className='btn-toggle' onClick={() => setIsOpen(open => !open)}>
+      <button className='btn-toggle' onClick={() => setIsOpen((open) => !open)}>
         {isOpen ? '–' : '+'}
       </button>
 
@@ -34,11 +35,11 @@ export const SelectedMovie = ({
   const [movie, setMovie] = useState({});
   const [userRating, setUserRating] = useState(0);
 
-  const isWatched = watched.some(movie => movie.imdbID === selectedId);
+  const isWatched = watched.some((movie) => movie.imdbID === selectedId);
 
   // derived state
   const watchedUserRating = watched.find(
-    movie => movie.imdbID === selectedId
+    (movie) => movie.imdbID === selectedId
   )?.userRating;
 
   // backdoor rating change counter
@@ -79,17 +80,11 @@ export const SelectedMovie = ({
     if (userRating) ratingCount.current++;
   }, [userRating]);
 
-  useEffect(() => {
-    function callback(e) {
-      if (e.key === 'Escape') {
-        onUnselect();
-      }
+  useKeyboard('keydown', (e) => {
+    if (e.key === 'Escape') {
+      onUnselect();
     }
-
-    document.addEventListener('keydown', callback);
-
-    return () => document.removeEventListener('keydown', callback);
-  }, [onUnselect]);
+  });
 
   useEffect(() => {
     async function getMovieById(selectedId) {
@@ -181,7 +176,7 @@ export const SelectedMovie = ({
 export const WatchedList = ({ watched, onDeleteWatched }) => {
   return (
     <ul className='list'>
-      {watched.map(movie => (
+      {watched.map((movie) => (
         <WatchedMovie
           movie={movie}
           onDeleteWatched={onDeleteWatched}
@@ -195,7 +190,7 @@ export const WatchedList = ({ watched, onDeleteWatched }) => {
 export const SearchedList = ({ movies, onSelect }) => {
   return (
     <ul className='list list-movies'>
-      {movies?.map(movie => (
+      {movies?.map((movie) => (
         <Movie movie={movie} key={movie.imdbID} onSelect={onSelect} />
       ))}
     </ul>
@@ -203,13 +198,13 @@ export const SearchedList = ({ movies, onSelect }) => {
 };
 
 export const Summary = ({ watched }) => {
-  const avgImdbRating = average(watched.map(movie => movie.imdbRating)).toFixed(
-    2
-  );
-  const avgUserRating = average(watched.map(movie => movie.userRating)).toFixed(
-    2
-  );
-  const avgRuntime = average(watched.map(movie => movie.runtime)).toFixed(2);
+  const avgImdbRating = average(
+    watched.map((movie) => movie.imdbRating)
+  ).toFixed(2);
+  const avgUserRating = average(
+    watched.map((movie) => movie.userRating)
+  ).toFixed(2);
+  const avgRuntime = average(watched.map((movie) => movie.runtime)).toFixed(2);
 
   return (
     <div className='summary'>
