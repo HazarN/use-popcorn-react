@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import Loader from './Loader';
 import ErrorMessage from './ErrorMessage';
@@ -35,20 +35,25 @@ export const SelectedMovie = ({
   const [userRating, setUserRating] = useState(0);
 
   const isWatched = watched.some(movie => movie.imdbID === selectedId);
+
+  // derived state
   const watchedUserRating = watched.find(
     movie => movie.imdbID === selectedId
   )?.userRating;
 
+  // backdoor rating change counter
+  const ratingCount = useRef(0);
+
   const {
     Title: title,
     Year: year,
-    Rated: rated,
+    Rated: rated /* OPTIMIZE: Delete if unnecessary */,
     Poster: poster,
     Released: released,
     Runtime: runtime,
     Genre: genre,
     Director: director,
-    Writer: writer,
+    Writer: writer /* OPTIMIZE: Delete if unnecessary */,
     Actors: actors,
     Plot: plot,
     imdbRating,
@@ -63,11 +68,16 @@ export const SelectedMovie = ({
       imdbRating: Number(imdbRating),
       runtime: Number(runtime.split(' ').at(0)),
       userRating,
+      ratingDecisionCount: ratingCount.current,
     };
 
     onAddWatched(newMovie);
     onUnselect();
   };
+
+  useEffect(() => {
+    if (userRating) ratingCount.current++;
+  }, [userRating]);
 
   useEffect(() => {
     function callback(e) {
