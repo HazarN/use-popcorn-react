@@ -20,7 +20,10 @@ export default function App() {
 
   const [watched, setWatched] = useLocalStorageState([], 'watched');
 
-  const { movies, isLoading, error } = useMovies(query, handleUnselect);
+  const { movies, setMovies, isLoading, error } = useMovies(
+    query,
+    handleUnselect
+  );
 
   function handleSelect(id) {
     setSelectedId((selectedId) => (selectedId = selectedId === id ? null : id));
@@ -41,7 +44,7 @@ export default function App() {
   return (
     <>
       <Navbar>
-        <Logo />
+        <Logo onUnselect={handleUnselect} setMovies={setMovies} />
         <SearchBar query={query} setQuery={setQuery} />
         <NavbarResult movies={movies} />
       </Navbar>

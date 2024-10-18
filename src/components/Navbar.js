@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useKeyboard } from '../hooks/useKeyboard';
 
 export const Navbar = ({ children }) => {
@@ -7,11 +7,16 @@ export const Navbar = ({ children }) => {
 
 // Subcomponets
 
-export const Logo = () => {
+export const Logo = ({ onUnselect, setMovies }) => {
+  function handleTransact() {
+    onUnselect();
+    setMovies((movies) => []);
+  }
+
   return (
     <div className='logo'>
       <span role='img'>🍿</span>
-      <h1>usePopcorn</h1>
+      <h1 onClick={handleTransact}>usePopcorn</h1>
     </div>
   );
 };
