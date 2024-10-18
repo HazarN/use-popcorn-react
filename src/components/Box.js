@@ -73,7 +73,6 @@ export const SelectedMovie = ({
     function callback(e) {
       if (e.key === 'Escape') {
         onUnselect();
-        console.log('Escape event!');
       }
     }
 
