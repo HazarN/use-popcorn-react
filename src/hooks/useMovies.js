@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react';
 
-export function useMovies(query, callback) {
+export function useMovies(query) {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    callback?.();
-
     const controller = new AbortController();
 
     async function getMoviesByQuery(query) {
@@ -47,7 +45,7 @@ export function useMovies(query, callback) {
     getMoviesByQuery(query);
 
     return () => controller.abort();
-  }, [query]); // Eslint tells that you should add 'callback' but when i add it, program fails about requesting(too many request at the same time)
+  }, [query]);
 
   return { movies, setMovies, isLoading, error };
 }

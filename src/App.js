@@ -20,10 +20,7 @@ export default function App() {
 
   const [watched, setWatched] = useLocalStorageState([], 'watched');
 
-  const { movies, setMovies, isLoading, error } = useMovies(
-    query,
-    handleUnselect
-  );
+  const { movies, setMovies, isLoading, error } = useMovies(query);
 
   function handleSelect(id) {
     setSelectedId((selectedId) => (selectedId = selectedId === id ? null : id));
