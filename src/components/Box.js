@@ -49,13 +49,11 @@ export const SelectedMovie = ({
   const {
     Title: title,
     Year: year,
-    Rated: rated /* OPTIMIZE: Delete if unnecessary */,
     Poster: poster,
     Released: released,
     Runtime: runtime,
     Genre: genre,
     Director: director,
-    Writer: writer /* OPTIMIZE: Delete if unnecessary */,
     Actors: actors,
     Plot: plot,
     imdbRating,

@@ -7,5 +7,5 @@ export function useTitle(title, cleanupTitle) {
     document.title = `Movie | ${title}`;
 
     return () => (document.title = cleanupTitle);
-  }, [title]);
+  }, [title, cleanupTitle]);
 }

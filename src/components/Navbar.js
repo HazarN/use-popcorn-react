@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { useKeyboard } from '../hooks/useKeyboard';
 
 export const Navbar = ({ children }) => {
