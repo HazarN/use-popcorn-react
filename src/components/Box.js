@@ -4,6 +4,7 @@ import Loader from './Loader';
 import ErrorMessage from './ErrorMessage';
 import Rating from './Rating';
 import { useKeyboard } from '../hooks/useKeyboard';
+import { useTitle } from '../hooks/useTitle';
 
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
@@ -76,15 +77,17 @@ export const SelectedMovie = ({
     onUnselect();
   };
 
-  useEffect(() => {
-    if (userRating) ratingCount.current++;
-  }, [userRating]);
-
   useKeyboard('keydown', (e) => {
     if (e.key === 'Escape') {
       onUnselect();
     }
   });
+
+  useTitle(title, 'usePopcorn');
+
+  useEffect(() => {
+    if (userRating) ratingCount.current++;
+  }, [userRating]);
 
   useEffect(() => {
     async function getMovieById(selectedId) {
@@ -111,17 +114,6 @@ export const SelectedMovie = ({
 
     getMovieById(selectedId);
   }, [selectedId]);
-
-  useEffect(() => {
-    if (!title) return;
-
-    document.title = `Movie | ${title}`;
-
-    // Clean-up function
-    return () => {
-      document.title = 'usePopcorn';
-    };
-  }, [title]);
 
   return (
     <div className='details'>
