@@ -1,6 +1,6 @@
 # 🍿 usePopcorn
 
-A React-based movie search and rating application that allows users to search for movies, view details, and maintain a personal watchlist with ratings. You can see the project in here, [empowered by AWS Amplify](https://main.d1mumhxacwm9eg.amplifyapp.com)
+A React-based movie search and rating application that allows users to search for movies, view details, and maintain a personal watchlist with ratings. You can see the project in here, [deployed with AWS Amplify](https://main.d1mumhxacwm9eg.amplifyapp.com)
 
 ## 🌟 Features
 
