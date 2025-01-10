@@ -24,18 +24,18 @@ A React-based movie search and rating application that allows users to search fo
 
 1. Clone the repository
 2. Install dependencies:
-_bashhere_
+```
 npm install
-_bashhere_
+```
 
 3. Create a `.env` file in the root directory and add your OMDB API key: `REACT_APP_KEY=your_omdb_api_key_here`
 
 ### Running the Application
 
 To start the development server:
-_bashhere_
+```
 npm start
-_bashhere_
+```
 
 The application will be available at `http://localhost:3000`
 
